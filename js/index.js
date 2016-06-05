@@ -327,10 +327,10 @@ $(document).ready(function() {
       "id": "095",
       "polygon": ["16,62 21,59 26,61 25,65 23,67 20,69 19,68"]
     }, {
-      "id": "096",
+      "id": "096A",
       "polygon": ["55,0 58,0 58,4 56,4 55,2"]
     }, {
-      "id": "097",
+      "id": "096B",
       "polygon": ["88,5 92,12 91,13 87,11"]
     }, {
       "id": "098",
@@ -425,7 +425,7 @@ $(document).ready(function() {
       for (key in game) {
         if (game[key]) {
           count++;
-          $('svg > [data-gameid="' + key + '"]').addClass('found').attr('title', games[key][0]);
+          $('svg > [data-gameid="' + key + '"]').addClass('found').attr('title', listofGames[key][0]);
           results.push($('.game-menu__list-of-games [data-gameid="' + key + '"]').addClass('found'));
         } else {
           results.push(void 0);
@@ -436,7 +436,7 @@ $(document).ready(function() {
     $('.progress__number').text(count);
   } else {
     gameProgress = [];
-    for (game in games) {
+    for (game in listofGames) {
       newGame = {};
       newGame[game] = false;
       gameProgress.push(newGame);
@@ -606,10 +606,9 @@ $('body').on('click', '.game-menu__list-of-games .game-selection.found', functio
 });
 
 loadGameInfoState = function(gameId, fromGameSearch) {
-  var game, gameInfoWrapper, gameInfoWrapperClass, gameReferenceImg, gameReferenceImgSrc, games, i, img, imgWrapper, imgWrapperClass, len, progress, ref;
+  var game, gameInfoWrapper, gameInfoWrapperClass, games, gamesImgReferences, progress;
   progress = JSON.parse(localStorage.spectropolisStatus);
-  games = JSON.parse(sessionStorage.games);
-  game = games[gameId];
+  games = JSON.parse(sessionStorage.listofGames);
   progress.filter(function(game) {
     var count, key, results;
     results = [];
@@ -619,7 +618,7 @@ loadGameInfoState = function(gameId, fromGameSearch) {
         localStorage.spectropolisStatus = JSON.stringify(progress);
         count = +$('.progress__number').text() + 1;
         $('.progress__number').text(count);
-        results.push($('[data-gameid="' + gameId + '"]').addClass('found').attr('title', games[gameId].name));
+        results.push($('[data-gameid="' + gameId + '"]').addClass('found').attr('title', games[gameId][0]));
       } else {
         results.push(void 0);
       }
@@ -632,26 +631,39 @@ loadGameInfoState = function(gameId, fromGameSearch) {
   if (fromGameSearch) {
     $('.references__container').remove();
   }
+  gamesImgReferences = JSON.parse(sessionStorage.games);
+  if (gamesImgReferences[gameId]) {
+    game = [gamesImgReferences[gameId]];
+  } else {
+    game = [gamesImgReferences[gameId + 'A'], gamesImgReferences[gameId + 'B']];
+  }
   gameInfoWrapper = document.createElement('div');
   gameInfoWrapperClass = document.createAttribute('class');
   gameInfoWrapper.setAttributeNode(gameInfoWrapperClass);
   gameInfoWrapperClass.value = 'game-info-wrapper';
-  ref = ['loading', 'screen1', 'screen2', 'inlay', 'arcade1', 'arcade2', 'arcade3', 'photo'];
-  for (i = 0, len = ref.length; i < len; i++) {
-    img = ref[i];
-    if (game[img]) {
-      imgWrapper = document.createElement('div');
-      imgWrapperClass = document.createAttribute('class');
-      imgWrapper.setAttributeNode(imgWrapperClass);
-      imgWrapperClass.value = 'game-reference-image-wrapper';
-      gameReferenceImg = document.createElement('img');
-      gameReferenceImgSrc = document.createAttribute('src');
-      gameReferenceImg.setAttributeNode(gameReferenceImgSrc);
-      gameReferenceImgSrc.value = game[img];
-      imgWrapper.appendChild(gameReferenceImg);
-      gameInfoWrapper.appendChild(imgWrapper);
+  game.forEach(function(row) {
+    var gameReferenceImg, gameReferenceImgSrc, i, img, imgWrapper, imgWrapperClass, len, ref, results;
+    ref = ['loading', 'screen1', 'screen2', 'inlay', 'arcade1', 'arcade2', 'arcade3', 'photo'];
+    results = [];
+    for (i = 0, len = ref.length; i < len; i++) {
+      img = ref[i];
+      if (row[img]) {
+        imgWrapper = document.createElement('div');
+        imgWrapperClass = document.createAttribute('class');
+        imgWrapper.setAttributeNode(imgWrapperClass);
+        imgWrapperClass.value = 'game-reference-image-wrapper';
+        gameReferenceImg = document.createElement('img');
+        gameReferenceImgSrc = document.createAttribute('src');
+        gameReferenceImg.setAttributeNode(gameReferenceImgSrc);
+        gameReferenceImgSrc.value = row[img];
+        imgWrapper.appendChild(gameReferenceImg);
+        results.push(gameInfoWrapper.appendChild(imgWrapper));
+      } else {
+        results.push(void 0);
+      }
     }
-  }
+    return results;
+  });
   return document.getElementsByTagName('body')[0].appendChild(gameInfoWrapper);
 };
 

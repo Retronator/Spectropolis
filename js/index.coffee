@@ -478,10 +478,10 @@ $(document).ready ->
       "id": "095",
       "polygon": ["16,62 21,59 26,61 25,65 23,67 20,69 19,68"]
     }, {
-      "id": "096",
+      "id": "096A",
       "polygon": ["55,0 58,0 58,4 56,4 55,2"]
     }, {
-      "id": "097",
+      "id": "096B",
       "polygon": ["88,5 92,12 91,13 87,11"]
     }, {
       "id": "098",
@@ -601,7 +601,7 @@ $(document).ready ->
 					count++
 
 					# For each game, set the polygon to found
-					$('svg > [data-gameid="' + key + '"]').addClass('found').attr('title', games[key][0])
+					$('svg > [data-gameid="' + key + '"]').addClass('found').attr('title', listofGames[key][0])
 
 					# Also set the games in the searchc list to found
 					$('.game-menu__list-of-games [data-gameid="' + key + '"]').addClass('found')
@@ -611,7 +611,7 @@ $(document).ready ->
 	else
 		# Start the game
 		gameProgress = []
-		for game of games
+		for game of listofGames
 			newGame = {}
 			newGame[game] = false
 			gameProgress.push(newGame)
@@ -830,8 +830,7 @@ $('body').on 'click', '.game-menu__list-of-games .game-selection.found', (e) ->
 # 2. View already found game (fromGameSearch = false)
 loadGameInfoState = (gameId, fromGameSearch) ->
 	progress = JSON.parse(localStorage.spectropolisStatus)
-	games = JSON.parse(sessionStorage.games)
-	game = games[gameId]
+	games = JSON.parse(sessionStorage.listofGames)
 	progress.filter (game) ->
 		for key of game
 			# If game hasn't been found yet, set it to found
@@ -844,7 +843,7 @@ loadGameInfoState = (gameId, fromGameSearch) ->
 				$('.progress__number').text(count)
 
 				# Update the polygon
-				$('[data-gameid="' + gameId + '"]').addClass('found').attr('title', games[gameId].name)
+				$('[data-gameid="' + gameId + '"]').addClass('found').attr('title', games[gameId][0])
 
 	# Another trigger on body is waiting for this state, delay the initial set so we don't close out
 	setTimeout ( ->
@@ -854,29 +853,38 @@ loadGameInfoState = (gameId, fromGameSearch) ->
 	# Clear out the game search if the GameInfo state if loading from that
 	if fromGameSearch
 		$('.references__container').remove()
+
+	gamesImgReferences = JSON.parse(sessionStorage.games)
+	# Set up the image references from the csv to pull from all relevant rows
+	if gamesImgReferences[gameId]
+		game = [gamesImgReferences[gameId]]
+	else
+		game = [gamesImgReferences[gameId + 'A'], gamesImgReferences[gameId + 'B']]
+
 	# Create a wrapper for all the previews
 	gameInfoWrapper = document.createElement('div')
 	gameInfoWrapperClass = document.createAttribute('class')
 	gameInfoWrapper.setAttributeNode(gameInfoWrapperClass)
 	gameInfoWrapperClass.value = 'game-info-wrapper'
 
-	for img in ['loading', 'screen1', 'screen2', 'inlay', 'arcade1', 'arcade2', 'arcade3', 'photo']
-		if game[img]
-			# Each image should have its own wrapper for flex
-			imgWrapper = document.createElement('div')
-			imgWrapperClass = document.createAttribute('class')
-			imgWrapper.setAttributeNode(imgWrapperClass)
-			imgWrapperClass.value = 'game-reference-image-wrapper'
+	game.forEach (row) ->
+		for img in ['loading', 'screen1', 'screen2', 'inlay', 'arcade1', 'arcade2', 'arcade3', 'photo']
+			if row[img]
+				# Each image should have its own wrapper for flex
+				imgWrapper = document.createElement('div')
+				imgWrapperClass = document.createAttribute('class')
+				imgWrapper.setAttributeNode(imgWrapperClass)
+				imgWrapperClass.value = 'game-reference-image-wrapper'
 
-			gameReferenceImg = document.createElement('img')
-			gameReferenceImgSrc = document.createAttribute('src')
-			gameReferenceImg.setAttributeNode(gameReferenceImgSrc)
-			gameReferenceImgSrc.value = game[img]
+				gameReferenceImg = document.createElement('img')
+				gameReferenceImgSrc = document.createAttribute('src')
+				gameReferenceImg.setAttributeNode(gameReferenceImgSrc)
+				gameReferenceImgSrc.value = row[img]
 
-			# Append the image to the image wrapper
-			imgWrapper.appendChild(gameReferenceImg)
-			# Append the image wrapper to the previews wrapper
-			gameInfoWrapper.appendChild(imgWrapper)
+				# Append the image to the image wrapper
+				imgWrapper.appendChild(gameReferenceImg)
+				# Append the image wrapper to the previews wrapper
+				gameInfoWrapper.appendChild(imgWrapper)
 	# Append the previews wrapper to the body
 	document.getElementsByTagName('body')[0].appendChild(gameInfoWrapper)
 
