@@ -1,0 +1,56 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="minimal-ui width=device-width, user-scalable=no, initial-scale=1" />
+	<title></title>
+	<link rel="stylesheet" href="css/normalize.min.css" />
+	<link rel="stylesheet" href="css/index.min.css" />
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body>
+  <div class="spectropolis__wrapper">
+    <svg width="100%" height="100%" class="spectropolis__interact" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg">
+      <image xlink:href="img/bg.png" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" style="-webkit-mask: url(#mask);mask: url(#mask)"></image>
+    </svg>
+  </div>
+  <div class="game-menu__wrapper active">
+    <div class="game-menu__toolbar">
+			<i class="fa fa-bars game-menu__toggle fa-2x"></i>
+			<i class="fa fa-plus-circle spectropolis__zoom-in fa-2x"></i>
+			<i class="fa fa-minus-circle spectropolis__zoom-out fa-2x"></i>
+		</div>
+    <div class="game-menu__list-of-games">
+      <p class="game-progress">You've found <span class="progress__number">0</span>/<span class="progress__total"></span> games:</p>
+      <label for="list-filter__found" class="list-filter">
+        <input type="radio" id="list-filter__found" name="list-filter" value="list-filter__found">
+        Found
+      </label>
+      <label for="list-filter__left" class="list-filter">
+        <input type="radio" id="list-filter__left" name="list-filter" value="list-filter__left">
+        Left
+      </label>
+      <label for="list-filter__all" class="list-filter selected">
+        <input type="radio" id="list-filter__all" name="list-filter" value="list-filter__all">
+        All
+      </label>
+      <ul class="all-games list-filter__all">
+      </ul>
+    </div>
+  </div>
+  <form class="guess-game">
+    <input type="search" class="all-games__search" placeholder="what game is this?"><button class="validate-guess">guess game</button>
+    <ul class="all-games">
+    </ul>
+  </form>
+  <div class="get-hint">
+  </div>
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.9.0/jets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.ui.min.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

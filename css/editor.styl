@@ -1,0 +1,59 @@
+// out: editor.min.css, sourcemap: true, compress: true
+
+@font-face
+  font-family 'ZX Spectrum'
+  src url('../fonts/zxspectrum-webfont.woff2') format('woff2'),
+      url('../fonts/zxspectrum-webfont.woff') format('woff'),
+      url('../fonts/zxspectrum.eot') format('eot')
+  font-weight normal
+  font-style normal
+
+html, body
+  font-size 2px
+  margin 0
+  padding 0
+  font-family 'ZX Spectrum'
+  line-height: 1.25
+
+*
+  position relative
+  box-sizing border-box
+
+img, canvas, image
+  image-rendering optimizeSpeed
+  image-rendering -moz-crisp-edges
+  image-rendering -o-crisp-edges
+  image-rendering -webkit-optimize-contrast
+  image-rendering pixelated
+  image-rendering optimize-contrast
+  -ms-interpolation-mode nearest-neighbor
+
+.management
+  font-size 8rem
+
+.game__wrapper
+  width: calc(540rem + 400px)
+
+.spectropolis__wrapper
+   width 540rem
+   height 382rem
+
+.spectropolis__bg,
+.spectropolis__bg--hover
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+
+svg > polygon
+  fill transparent
+  cursor pointer
+
+[data-status="makingPolygon"] polygon,
+[data-status="drawingRectangles"] polygon
+  pointer-events none
+
+[data-status] polygon
+  fill black
+  opacity 0.5
